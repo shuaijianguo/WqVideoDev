@@ -1,0 +1,11 @@
+微信小程序-短视频开发 技术点：
+- maven
+- springmvc
+- springboot
+- mybatis
+- mybatis-pagehelper
+- redis
+- ffmpeg
+- druid
+- mariadb/mysql
+- zookeeper音频操作
