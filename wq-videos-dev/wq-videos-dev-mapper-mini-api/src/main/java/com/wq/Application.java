@@ -8,7 +8,7 @@ import tk.mybatis.spring.annotation.MapperScan;
 
 @SpringBootApplication
 @MapperScan(basePackages="com.wq.mapper")
-@ComponentScan(basePackages= {"com.wq"})
+@ComponentScan(basePackages= {"com.wq","org.n3r.idworker"})
 public class Application {
 	
 	public static void main(String[] args) {
