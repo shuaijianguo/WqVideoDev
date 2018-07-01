@@ -20,7 +20,7 @@
       <module>wq-videos-dev-mapper</module>
       <module>wq-videos-dev-service</module>
       <module>wq-videos-dev-mapper-mini-api</module>
-    </modules>
+  </modules>
 
 
   <name>微信小程序-短视频开发</name>
