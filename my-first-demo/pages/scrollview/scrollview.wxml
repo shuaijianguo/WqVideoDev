@@ -1,0 +1,14 @@
+<scroll-view scroll-y="true" style="height:400rpx;margin-top:100rpx;width:100%" bindscrolltoupper="upper" bindscrolltolower="lower" scroll-into-view="yellow" >
+  <view id="green" class="scroll-view-item bc_green">1</view>
+  <view id="red" class="scroll-view-item bc_red">2</view>
+  <view id="yellow" class="scroll-view-item bc_yellow">3</view>
+  <view id="blue" class="scroll-view-item bc_blue">4</view>
+</scroll-view>
+
+
+ <scroll-view class="scroll-view_H" scroll-x="true" >
+    <view id="green" class="scroll-view-item_H bc_green_h">a</view>
+    <view id="red"  class="scroll-view-item_H bc_red_h">b</view>
+    <view id="yellow" class="scroll-view-item_H bc_yellow_h">c</view>
+    <view id="blue" class="scroll-view-item_H bc_blue_h">d</view>
+  </scroll-view> 

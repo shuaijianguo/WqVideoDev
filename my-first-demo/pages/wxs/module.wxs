@@ -1,0 +1,9 @@
+var foo = "'hello world' from comm.wxs";
+var bar = function (d) {
+  return d;
+}
+module.exports = {
+  //公有化
+  foo: foo,
+  bar: bar
+};

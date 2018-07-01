@@ -1,0 +1,55 @@
+/**index.wxss**/
+.scroll-view-item {
+  display: flex;
+  width: 100%;
+  height: 200rpx;
+  background-color: yellow;
+}
+
+.bc_green{
+   background-color: green;
+}
+
+.bc_red{
+   background-color: red;
+}
+
+.bc_yellow{
+   background-color: yellow;
+}
+
+.bc_blue{
+   background-color: blue;
+}
+
+
+.scroll-view_H{
+  display: flex;
+  width: 100%;
+  height: 200rpx;
+margin-top:100rpx;
+white-space: nowrap
+}
+
+.scroll-view-item_H{
+  width: 250rpx;
+  height: 200rpx;
+  display: inline-block;
+}
+
+.bc_green_h{
+  background-color: green;
+}
+
+
+.bc_red_h{
+   background-color: red;
+}
+
+.bc_yellow_h{
+   background-color: yellow;
+}
+
+.bc_blue_h{
+   background-color: blue;
+}

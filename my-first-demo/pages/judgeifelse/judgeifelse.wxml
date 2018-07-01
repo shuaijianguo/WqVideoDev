@@ -1,0 +1,14 @@
+<view>
+  <view wx:if="{{age>=18&&age<=30}}">成年</view>
+  <view wx:elif="{{age<18}}">未成年</view>
+  <view wx:else> 终于老了</view>
+
+  <block wx:if="{{false}}">
+    <view> 这是一个块级元素 </view>
+    <view> 本节是条件判断 </view>
+  </block>
+  <view hidden='{{true}}'>
+    <view> 适用于需要频繁切换的情景 </view>
+    <view> 懒加载模式 </view>
+  </view>
+</view>

@@ -1,0 +1,7 @@
+<view>
+<wxs src="../wxs/module.wxs" module="tools" />
+<view> {{tools.foo}} </view>
+<view> {{tools.bar(tools.foo)}} </view>
+<view> {{tools.foo}} </view>
+<view> {{tools.bar(tools.foo)}} </view>
+</view>

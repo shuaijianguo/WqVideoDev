@@ -1,0 +1,17 @@
+{
+  "pages": [
+    "pages/swiper/swiper",
+    "pages/scrollview/scrollview",
+    "pages/wxs/wxs",
+    "pages/temps/temps",
+    "pages/judgeifelse/judgeifelse",
+    "pages/list/list",
+    "pages/index/index"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "test",
+    "navigationBarTextStyle": "black"
+  }
+}
