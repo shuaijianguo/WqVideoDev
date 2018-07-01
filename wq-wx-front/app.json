@@ -1,0 +1,13 @@
+{
+  "pages":[
+    "pages/userRegist/regist",
+    "pages/index/index"
+  ],
+  "window":{
+    "backgroundTextStyle":"light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "小乌青短视频",
+    "navigationBarTextStyle":"black"
+  },
+  "debug":true
+}
