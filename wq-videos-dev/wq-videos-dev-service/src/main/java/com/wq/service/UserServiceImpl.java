@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.entity.Example;
+import tk.mybatis.mapper.entity.Example.Criteria;
 
 /**
  * Created by wuqingvika on 2018/7/1.
@@ -34,5 +36,16 @@ public class UserServiceImpl implements UserService {
         String userId = sid.nextShort();
         user.setId(userId);
         usersMapper.insert(user);
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public Users queryUserByNameAndPwd(String username, String pwd) {
+        Example userExample=new Example(Users.class);
+        Criteria criteria=userExample.createCriteria();
+        criteria.andEqualTo("username",username);
+        criteria.andEqualTo("password",pwd);
+        Users users = usersMapper.selectOneByExample(userExample);
+        return users;
     }
 }

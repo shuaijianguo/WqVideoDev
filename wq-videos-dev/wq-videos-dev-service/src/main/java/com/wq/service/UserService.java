@@ -18,4 +18,12 @@ public interface UserService {
      * @param user
      */
     public void saveUser(Users user);
+
+    /**
+     * 根据用户名密码查询该用户
+     * @param username
+     * @param pwd
+     * @return
+     */
+    public Users queryUserByNameAndPwd(String username,String pwd);
 }

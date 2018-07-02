@@ -6,6 +6,7 @@ import com.wq.utils.JSONResult;
 import com.wq.utils.MD5Utils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.catalina.User;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,5 +46,23 @@ public class RegistLoginController {
             return JSONResult.errorMsg("用户名已存在");
         }
         return JSONResult.ok();
+    }
+
+    @ApiOperation(value = "用户登录",notes = "用户登录的接口")
+    @PostMapping("/login")
+    public JSONResult login(@RequestBody Users users) throws Exception{
+        //1.判断用户名密码是否为空
+        if(StringUtils.isBlank(users.getUsername())||StringUtils.isBlank(users.getPassword())){
+            return JSONResult.errorMsg("用户名和密码不能为空");
+        }
+        //2.判断用户密码是否正确
+        Users userResult = userService.queryUserByNameAndPwd(users.getUsername(),MD5Utils.getMD5Str(users.getPassword()));
+        //3.注册新用户
+        if(userResult!=null){
+            userResult.setPassword("");//因为密码返回给前端的 所以要保密
+            return JSONResult.ok(userResult);
+        }else{
+            return JSONResult.errorMsg("用户名或密码不正确");
+        }
     }
 }
