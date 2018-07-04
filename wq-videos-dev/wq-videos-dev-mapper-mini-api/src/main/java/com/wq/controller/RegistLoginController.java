@@ -6,6 +6,7 @@ import com.wq.service.UserService;
 import com.wq.utils.JSONResult;
 import com.wq.utils.MD5Utils;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.apache.catalina.User;
 import org.apache.commons.lang3.StringUtils;
@@ -82,5 +83,14 @@ public class RegistLoginController extends BasicController{
         }else{
             return JSONResult.errorMsg("用户名或密码不正确");
         }
+    }
+
+    @ApiOperation(value = "用户注销",notes = "用户注销的接口")
+    @ApiImplicitParam(name = "userId",value = "用户Id",required = true,
+            dataType = "String",paramType = "query")
+    @PostMapping("/logout")
+    public JSONResult logOut(String userId) throws Exception{
+       redis.del(USER_REDIS_SESSION+":"+userId);
+       return JSONResult.ok();
     }
 }

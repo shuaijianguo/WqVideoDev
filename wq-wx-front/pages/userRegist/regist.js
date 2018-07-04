@@ -1,10 +1,6 @@
 const app = getApp()
 
 Page({
-    data: {
-
-    },
-
     doRegist: function(e) {
       var me = this;
       var formObject = e.detail.value;
