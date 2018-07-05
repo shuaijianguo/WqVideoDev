@@ -4,7 +4,7 @@ const app = getApp()
 
 Page({
   data: {
-   // isMe:true,
+    isMe:true,
     faceUrl: "../resource/images/noneface.png" 
   },
 
@@ -14,6 +14,9 @@ Page({
   logout:function(){
       var user=app.userInfo;
       var serverUrl = app.serverUrl;
+      wx.showLoading({
+        title: '请等待...',
+      });
       wx.request({
         url: serverUrl + '/logout?userId='+user.id,
         method: "POST",
@@ -47,5 +50,37 @@ Page({
           }
         }
       })
+  },
+  changeFace:function(){
+    wx.chooseImage({
+      count:1,
+      sizeType:['compressed'],
+      sourceType:['album'],
+      success: function(res) {
+        var tempPaths=res.tempFilePaths;
+        var serverUrl=app.serverUrl;
+        console.log(tempPaths[0]);
+        wx.showLoading({
+          title: '上传中...',
+        });
+        wx.uploadFile({
+          url: serverUrl+'/user/uploadFace?userId='+app.userInfo.id,
+          filePath: tempPaths[0],
+          name: 'file',//后端定义的key
+          header: {
+            'content-type': 'application/json' // 默认值
+          },
+          success:function(res){
+            var data=res.data;
+            console.log(data);
+            wx.hideLoading();
+            wx.showToast({
+              title: '上传成功!',
+              icon:"success"
+            })
+          }
+        })
+      },
+    })
   }
 })
