@@ -1,7 +1,8 @@
-package com.wq.service;
+package com.wq.service.impl;
 
 import com.wq.mapper.UsersMapper;
 import com.wq.pojo.Users;
+import com.wq.service.UserService;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

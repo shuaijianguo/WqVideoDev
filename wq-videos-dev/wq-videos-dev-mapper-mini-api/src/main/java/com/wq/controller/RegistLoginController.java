@@ -25,7 +25,7 @@ import java.util.UUID;
  */
 @RestController
 
-@Api(value = "用户注册/登录的接口",tags = {"注册/登录的controller"})
+@Api(value = "用户注册/登录的接口",tags = {"注册/登录的RegistLoginController"})
 public class RegistLoginController extends BasicController{
     @Autowired
     private UserService userService;
@@ -58,7 +58,7 @@ public class RegistLoginController extends BasicController{
 
     public UsersVO setUserRedisSessionToken(Users userModel){
         String uniqueToken= UUID.randomUUID().toString();
-        //冒号 redis会有层级分类
+        //加了冒号 redis会有层级分类
         redis.set(USER_REDIS_SESSION+":"+userModel.getId(),uniqueToken,1000*30*60);//30分钟
         UsersVO usersVO=new UsersVO();
         BeanUtils.copyProperties(userModel,usersVO);//拷到Vo中去

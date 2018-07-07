@@ -24,7 +24,7 @@ import java.util.UUID;
  */
 @RestController
 
-@Api(value = "用户相关业务的接口", tags = {"用户相关业务的controller"})
+@Api(value = "用户相关业务的接口", tags = {"用户相关业务的UserController"})
 @RequestMapping("/user")
 public class UserController extends BasicController {
     @Autowired
