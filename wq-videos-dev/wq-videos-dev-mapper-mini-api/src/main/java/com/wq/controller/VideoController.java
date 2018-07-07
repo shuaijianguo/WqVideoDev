@@ -30,17 +30,17 @@ public class VideoController {
     @ApiOperation(value = "上传视频", notes = "上传视频的接口")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userId", value = "用户Id", required = true,
-                    dataType = "String", paramType = "query"),
+                    dataType = "String", paramType = "form"),
             @ApiImplicitParam(name = "bgmId", value = "背景音乐Id", required = false,
-                    dataType = "String", paramType = "query"),
+                    dataType = "String", paramType = "form"),
             @ApiImplicitParam(name = "videoSeconds", value = "背景音乐播放长度", required = true,
-                    dataType = "String", paramType = "query"),
+                    dataType = "String", paramType = "form"),
             @ApiImplicitParam(name = "videoWidth", value = "视频宽度", required = true,
-            dataType = "String", paramType = "query"),
+            dataType = "String", paramType = "form"),
             @ApiImplicitParam(name = "videoHeight", value = "视频高度", required = true,
-                    dataType = "String", paramType = "query"),
+                    dataType = "String", paramType = "form"),
             @ApiImplicitParam(name = "desc", value = "视频描述", required = false,
-                    dataType = "String", paramType = "query")
+                    dataType = "String", paramType = "form")
     })
     @PostMapping(value = "/upload",headers = "content-type=multipart/form-data")
     public JSONResult upload(String userId, String bgmId,double videoSeconds,
