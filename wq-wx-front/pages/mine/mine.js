@@ -9,7 +9,38 @@ Page({
   },
 
   onLoad: function (params) {
-   
+   var that=this;
+   var user = app.userInfo;
+   var serverUrl = app.serverUrl;
+   wx.showLoading({
+     title: '页面努力加载中...',
+   });
+   wx.request({
+     url: serverUrl + '/user/query?userId=' + user.id,
+     method: "POST",
+     header: {
+       'content-type': 'application/json' // 默认值
+     },
+     success: function (res) {
+       console.log(res.data);
+       wx.hideLoading();
+       var status = res.data.status;
+       if (status == 200) {
+         var myUserInfo=res.data.data;
+         var faceUrl ='../resource/images/noneface.png';
+         if (myUserInfo.faceImage != null && myUserInfo.faceImage != '' && myUserInfo.faceImage!=undefined){
+           faceUrl = serverUrl + myUserInfo.faceImage;
+         }
+         that.setData({
+           faceUrl: faceUrl,
+           nickname: myUserInfo.nickname,
+           fansCounts: myUserInfo.fansCounts,
+           followCounts: myUserInfo.followCounts,
+           receiveLikeCounts: myUserInfo.receiveLikeCounts
+         })
+       }
+     }
+   })
   },
   logout:function(){
       var user=app.userInfo;
@@ -34,13 +65,13 @@ Page({
               icon: 'none',
               duration: 3000
             })
-            // app.userInfo = res.data.data;
+            app.userInfo = null;
             // fixme 修改原有的全局对象为本地缓存
             //app.setGlobalUserInfo(res.data.data);
             // 页面跳转
-            // wx.redirectTo({
-            //   url: '../mine/mine',
-            // })
+             wx.redirectTo({
+              url: '../userLogin/login',
+             })
           } else if (status == 500) {
             wx.showToast({
               title: res.data.msg,

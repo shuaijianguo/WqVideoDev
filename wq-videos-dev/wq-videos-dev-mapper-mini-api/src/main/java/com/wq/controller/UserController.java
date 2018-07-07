@@ -35,8 +35,8 @@ public class UserController extends BasicController {
             dataType = "String", paramType = "query")
     @PostMapping("/uploadFace")
     public JSONResult uploadFace(String userId, @RequestParam("file") MultipartFile[] files) throws Exception {
-       if(StringUtils.isBlank(userId)){
-           return JSONResult.errorMsg("用户Id不可为空");
+        if (StringUtils.isBlank(userId)) {
+            return JSONResult.errorMsg("用户Id不可为空");
         }
         String fileSpace = "D:/wqlesson/userData";//文件保存的命名空间
         String uploadPathDB = "/" + userId + "/face";//保存到数据库中的相对路径
@@ -58,7 +58,7 @@ public class UserController extends BasicController {
                     outputStream = new FileOutputStream(outFile);
                     inputStream = files[0].getInputStream();
                     IOUtils.copy(inputStream, outputStream);
-                }else {
+                } else {
                     return JSONResult.errorMsg("上传出错..");
                 }
             }
@@ -72,10 +72,25 @@ public class UserController extends BasicController {
                 outputStream.close();
             }
         }
-        Users users=new Users();
+        Users users = new Users();
         users.setId(userId);
         users.setFaceImage(uploadPathDB);///180425CFA4RB6T0H/face/wxa2049f5aead89372.o6zAJs5sm5bPFcTzKXp_5wXsWuso.W0eLNdT6MIvD3ba01f74ba779caa63d038c3c8200b4a.jpg
         userService.updateUserInfo(users);
         return JSONResult.ok(uploadPathDB);
     }
+
+    @ApiOperation(value = "用户查询个人信息", notes = "用户查询个人信息的接口")
+    @ApiImplicitParam(name = "userId", value = "用户Id", required = true,
+            dataType = "String", paramType = "query")
+    @PostMapping("/query")
+    public JSONResult query(String userId)  {
+        if (StringUtils.isBlank(userId)) {
+            return JSONResult.errorMsg("用户Id不可为空");
+        }
+        Users users = userService.queryUserByUserId(userId);
+        UsersVO usersVO=new UsersVO();
+        BeanUtils.copyProperties(users,usersVO);
+        return JSONResult.ok(usersVO);
+    }
+
 }
