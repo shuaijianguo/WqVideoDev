@@ -35,6 +35,9 @@ public class UserController extends BasicController {
             dataType = "String", paramType = "query")
     @PostMapping("/uploadFace")
     public JSONResult uploadFace(String userId, @RequestParam("file") MultipartFile[] files) throws Exception {
+       if(StringUtils.isBlank(userId)){
+           return JSONResult.errorMsg("用户Id不可为空");
+        }
         String fileSpace = "D:/wqlesson/userData";//文件保存的命名空间
         String uploadPathDB = "/" + userId + "/face";//保存到数据库中的相对路径
         OutputStream outputStream = null;
@@ -55,10 +58,13 @@ public class UserController extends BasicController {
                     outputStream = new FileOutputStream(outFile);
                     inputStream = files[0].getInputStream();
                     IOUtils.copy(inputStream, outputStream);
+                }else {
+                    return JSONResult.errorMsg("上传出错..");
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
+            return JSONResult.errorMsg("上传出错..");
         } finally {
             //ctrl+alt+t 生成try/catch/finally 快捷键
             if (outputStream != null) {
@@ -66,6 +72,10 @@ public class UserController extends BasicController {
                 outputStream.close();
             }
         }
-        return JSONResult.ok();
+        Users users=new Users();
+        users.setId(userId);
+        users.setFaceImage(uploadPathDB);///180425CFA4RB6T0H/face/wxa2049f5aead89372.o6zAJs5sm5bPFcTzKXp_5wXsWuso.W0eLNdT6MIvD3ba01f74ba779caa63d038c3c8200b4a.jpg
+        userService.updateUserInfo(users);
+        return JSONResult.ok(uploadPathDB);
     }
 }

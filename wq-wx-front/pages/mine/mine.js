@@ -52,6 +52,7 @@ Page({
       })
   },
   changeFace:function(){
+    var that=this;
     wx.chooseImage({
       count:1,
       sizeType:['compressed'],
@@ -71,13 +72,25 @@ Page({
             'content-type': 'application/json' // 默认值
           },
           success:function(res){
-            var data=res.data;
+            var data=JSON.parse(res.data);
+            var status = data.status;
             console.log(data);
             wx.hideLoading();
-            wx.showToast({
-              title: '上传成功!',
-              icon:"success"
-            })
+            if (status == 200) {
+              wx.showToast({
+                title: "恭喜您,上传成功！",
+                icon: 'none',
+                duration: 3000
+              });
+              var myFaceUrl=data.data;
+              that.setData({
+                faceUrl:serverUrl+myFaceUrl
+              });
+            } else if (status ==500) {
+              wx.showToast({
+                title: data.msg
+              })
+            }
           }
         })
       },

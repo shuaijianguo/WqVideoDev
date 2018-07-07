@@ -26,4 +26,10 @@ public interface UserService {
      * @return
      */
     public Users queryUserByNameAndPwd(String username,String pwd);
+
+    /**
+     * 修改用户信息
+     * @param users
+     */
+    public void updateUserInfo(Users users);
 }
