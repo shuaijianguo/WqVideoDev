@@ -29,9 +29,9 @@ public class MergeVideoMp3 {
         command.add(String.valueOf(seconds));
         command.add("-y");//覆盖替换的意思
         command.add(outputVideoPath);
-        for (String c:command) {
+       /* for (String c:command) {
             System.out.print(c+" ");
-        }
+        }*/
         ProcessBuilder builder=new ProcessBuilder(command);
         try {
             Process process=builder.start();
