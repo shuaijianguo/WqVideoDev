@@ -75,13 +75,52 @@ Page({
          var data = JSON.parse(res.data);
          var status = data.status;
          console.log(data);
+         var videoId=data.data;
          wx.hideLoading();
          if (status == 200) {
-           wx.showToast({
-             title: "恭喜您,上传成功！",
-             icon: 'none',
-             duration: 3000
+           wx.showLoading({
+             title: '上传中...',
            });
+          //第二部分:上传封面
+           wx.uploadFile({
+             url: serverUrl + '/video/uploadCover',
+             filePath: tmpCoverUrl,
+             name: 'file',//后端定义的key
+             header: {
+               'content-type': 'application/json' // 默认值
+             },
+             formData: {
+               userId: app.userInfo.id,
+               videoId: videoId
+             },
+             success: function (res) {
+               var data = JSON.parse(res.data);
+               var status = data.status;
+               console.log(data);
+               wx.hideLoading();
+               if (status == 200) {
+                 wx.showToast({
+                   title: "恭喜您,上传成功！",
+                   icon: 'none',
+                   duration: 3000
+                 });
+                
+                 wx.navigateBack({
+                   delta: 1,
+                 });
+
+               } else if (status == 500) {
+                 wx.showToast({
+                   title: data.msg
+                 })
+               }
+             }
+           });
+          //  wx.showToast({
+          //    title: "恭喜您,上传成功！",
+          //    icon: 'none',
+          //    duration: 3000
+          //  });
           
          } else if (status == 500) {
            wx.showToast({
