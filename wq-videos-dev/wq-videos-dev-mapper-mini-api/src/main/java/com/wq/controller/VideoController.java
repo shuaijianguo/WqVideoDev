@@ -5,6 +5,7 @@ import com.wq.pojo.Bgm;
 import com.wq.pojo.Videos;
 import com.wq.service.BgmService;
 import com.wq.service.VideoService;
+import com.wq.utils.FetchVideoCover;
 import com.wq.utils.JSONResult;
 import com.wq.utils.MergeVideoMp3;
 import io.swagger.annotations.*;
@@ -56,15 +57,19 @@ public class VideoController extends BasicController{
             return JSONResult.errorMsg("用户Id不可为空");
         }
         String uploadPathDB = "/" + userId + "/video";//保存到数据库中的相对路径
+        String coverPathDB="/"+userId+"/video";
         String finalVideoPath ="";
+        //String finalVideoCover="";//最终的封面路径
         OutputStream outputStream = null;
         InputStream inputStream = null;
         try {
             if (file != null ) {
                 String fileName = file.getOriginalFilename();
+                String fileNamePrefix=fileName.split("\\.")[0];
                 if (StringUtils.isNotBlank(fileName)) {
                     //文件上传的最终保存路径
                      finalVideoPath = FILE_SPACE+ uploadPathDB + "/" + fileName;
+                    coverPathDB=coverPathDB+"/"+fileNamePrefix+".jpg";
                     //设置数据库保存的路径
                     uploadPathDB += ("/" + fileName);
                     File outFile = new File(finalVideoPath);
@@ -105,6 +110,10 @@ public class VideoController extends BasicController{
         }
         System.out.println("newVideoPath:  "+uploadPathDB);
         System.out.println("finalVideoPath:  "+finalVideoPath);
+
+        //利用ffmpeg生成视频封面
+        FetchVideoCover coverTool=new FetchVideoCover(FFMPEG_EXE);
+        coverTool.convorter(finalVideoPath,FILE_SPACE+coverPathDB);
         //保存视频信息到数据库
         Videos video=new Videos();
         video.setAudioId(bgmId);
@@ -116,6 +125,7 @@ public class VideoController extends BasicController{
         video.setVideoPath(uploadPathDB);
         video.setStatus(VideoStatusEnum.SUCCESS.value);//设置播放状态
         video.setCreateTime(new Date());
+        video.setCoverPath(coverPathDB);
         String id = videoService.saveVideo(video);
         return JSONResult.ok(id);
     }
