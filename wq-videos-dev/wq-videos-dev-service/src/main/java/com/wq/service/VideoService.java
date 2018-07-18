@@ -2,6 +2,7 @@ package com.wq.service;
 
 import com.wq.pojo.Bgm;
 import com.wq.pojo.Videos;
+import com.wq.utils.PagedResult;
 
 import java.util.List;
 
@@ -21,4 +22,12 @@ public interface VideoService {
      * @param coverPath
      */
     public void updateCoverVideoById(String id,String coverPath);
+
+    /**
+     * 分页显示所有的视频
+     * @param currentPage
+     * @param pageSize
+     * @return
+     */
+    public PagedResult getAllVideos(Integer currentPage, Integer pageSize);
 }
