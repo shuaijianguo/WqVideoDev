@@ -10,7 +10,8 @@ Page({
 
   onLoad: function (params) {
    var that=this;
-   var user = app.userInfo;
+   //var user = app.userInfo;
+   var user = app.getGlobalUserInfo();
    var serverUrl = app.serverUrl;
    wx.showLoading({
      title: '页面努力加载中...',
@@ -43,7 +44,7 @@ Page({
    })
   },
   logout:function(){
-      var user=app.userInfo;
+    var user = app.getGlobalUserInfo();//app.userInfo;
       var serverUrl = app.serverUrl;
       wx.showLoading({
         title: '请等待...',
@@ -65,9 +66,9 @@ Page({
               icon: 'none',
               duration: 3000
             })
-            app.userInfo = null;
+            //app.userInfo = null;
             // fixme 修改原有的全局对象为本地缓存
-            //app.setGlobalUserInfo(res.data.data);
+            wx.removeStorageSync("userInfo");
             // 页面跳转
              wx.redirectTo({
               url: '../userLogin/login',
@@ -84,6 +85,7 @@ Page({
   },
   changeFace:function(){
     var that=this;
+    var userInfo = app.getGlobalUserInfo();
     wx.chooseImage({
       count:1,
       sizeType:['compressed'],
@@ -96,7 +98,7 @@ Page({
           title: '上传中...',
         });
         wx.uploadFile({
-          url: serverUrl+'/user/uploadFace?userId='+app.userInfo.id,
+          url: serverUrl+'/user/uploadFace?userId='+userInfo.id,
           filePath: tempPaths[0],
           name: 'file',//后端定义的key
           header: {

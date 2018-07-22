@@ -53,6 +53,7 @@ Page({
     var videoWidth = prePageParams.tmpWidth;
     var tmpVideoUrl = prePageParams.tmpVideoUrl;
     var tmpCoverUrl = prePageParams.tmpCoverUrl;
+    var userInfo = app.getGlobalUserInfo;
     wx.showLoading({
       title: '上传中...',
     });
@@ -64,7 +65,7 @@ Page({
         'content-type': 'application/json' // 默认值
       },
       formData: {
-        userId: app.userInfo.id,
+        userId: userInfo.id,
         videoSeconds: videoSeconds,
         videoHeight: videoHeight,
         videoWidth: videoWidth,
