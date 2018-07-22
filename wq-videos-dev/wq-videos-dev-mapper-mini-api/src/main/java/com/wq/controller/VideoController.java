@@ -8,6 +8,7 @@ import com.wq.service.VideoService;
 import com.wq.utils.FetchVideoCover;
 import com.wq.utils.JSONResult;
 import com.wq.utils.MergeVideoMp3;
+import com.wq.utils.PagedResult;
 import io.swagger.annotations.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -182,4 +183,19 @@ public class VideoController extends BasicController{
         return JSONResult.ok();
     }
 
+    /**
+     *
+     * @Description: 分页和搜索查询视频列表
+     * isSaveRecord：1 - 需要保存
+     * 				 0 - 不需要保存 ，或者为空的时候
+     */
+    @PostMapping(value="/showAll")
+    public JSONResult showAll(Integer page) throws Exception {
+        if (page == null) {
+            page = 1;
+        }
+        Integer pageSize=PAGE_SIZE;
+        PagedResult result = videoService.getAllVideos(page,pageSize);
+        return JSONResult.ok(result);
+    }
 }
