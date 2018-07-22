@@ -1,18 +1,17 @@
 {
-  "pages":[
-         
+  "pages": [
+    "pages/videoDetail/videoDetail",
+    "pages/index/index",
     "pages/userLogin/login",
     "pages/mine/mine",
     "pages/userRegist/regist",
-    "pages/chooseBgm/chooseBgm",
-    
-    "pages/index/index"
+    "pages/chooseBgm/chooseBgm"
   ],
-  "window":{
-    "backgroundTextStyle":"light",
+  "window": {
+    "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "小乌青短视频",
-    "navigationBarTextStyle":"black"
+    "navigationBarTextStyle": "black"
   },
-  "debug":true
+  "debug": true
 }

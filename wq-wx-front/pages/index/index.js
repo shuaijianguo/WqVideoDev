@@ -22,65 +22,17 @@ Page({
     wx.showLoading({
       title: '请等待,正在加载中...',
     })
-    // 获取当前的分页数
     var page = me.data.page;
-    var serverUrl = app.serverUrl;
-    wx.request({
-      url: serverUrl + '/video/showAll?page=' + page,
-      method: "POST",
-      data: {
-        //videoDesc: searchContent
-      },
-      success: function(res) {
-        wx.hideLoading();
-        console.log(res.data);
-        if(page==1){
-          me.setData({
-            videoList:[]
-          })
-        }
-        var backVideoList=res.data.data.rows;//后端上拉或下拉加载的视频信息
-        var pageVideoList=me.data.videoList;//页面上
-        me.setData({
-          videoList: pageVideoList.concat(backVideoList),
-          page:page,
-          totalPage:res.data.data.total,
-          serverUrl:serverUrl
-        })
-      }
-    });
-    // wx.hideNavigationBarLoading();
-    //       wx.stopPullDownRefresh();
-
-    //       console.log(res.data);
-
-    //       // 判断当前页page是否是第一页，如果是第一页，那么设置videoList为空
-    //       if (page === 1) {
-    //         me.setData({
-    //           videoList: []
-    //         });
-    //       }
-
-    //       var videoList = res.data.data.rows;
-    //       var newVideoList = me.data.videoList;
-
-    //       me.setData({
-    //         videoList: newVideoList.concat(videoList),
-    //         page: page,
-    //         totalPage: res.data.data.total,
-    //         serverUrl: serverUrl
-    //       });
-
-    // }
-    // })
+    console.log(me.data);
+    me.getAllVideoList(page);
   },
 
   onPullDownRefresh: function() {
     wx.showNavigationBarLoading();
-    this.getAllVideoList(1, 0);
+    this.getAllVideoList(1);
   },
 
-  onReachBottom: function() {
+  onReachBottom: function() {//上拉加载更多
     var me = this;
     var currentPage = me.data.page;
     var totalPage = me.data.totalPage;
@@ -96,9 +48,42 @@ Page({
 
     var page = currentPage + 1;
 
-    me.getAllVideoList(page, 0);
+    me.getAllVideoList(page);
   },
 
+  getAllVideoList: function(page) {
+    var me = this;
+    // 获取当前的分页数
+
+    var serverUrl = app.serverUrl;
+    wx.request({
+      url: serverUrl + '/video/showAll?page=' + page,
+      method: "POST",
+      data: {
+        //videoDesc: searchContent
+      },
+      success: function(res) {
+        wx.hideLoading();
+        wx.hideNavigationBarLoading();//隐藏导航条动画
+        wx.stopPullDownRefresh();//停止下拉的刷新 
+        console.log(res.data);
+        if (page == 1) {
+          me.setData({
+            videoList: []
+          })
+        }
+        var backVideoList = res.data.data.rows; //后端上拉或下拉加载的视频信息
+        var pageVideoList = me.data.videoList; //页面上
+        me.setData({
+          videoList: pageVideoList.concat(backVideoList),
+          page: page,
+          totalPage: res.data.data.total,
+          serverUrl: serverUrl
+        })
+      }
+    });
+
+  },
   showVideoInfo: function(e) {
     var me = this;
     var videoList = me.data.videoList;
