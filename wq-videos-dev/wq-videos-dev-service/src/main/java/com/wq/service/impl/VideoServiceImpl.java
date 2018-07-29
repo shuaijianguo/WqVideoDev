@@ -2,8 +2,10 @@ package com.wq.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.wq.mapper.SearchRecordsMapper;
 import com.wq.mapper.VideosMapper;
 import com.wq.mapper.VideosMapperCustom;
+import com.wq.pojo.SearchRecords;
 import com.wq.pojo.Videos;
 import com.wq.pojo.vo.VideosVO;
 import com.wq.service.VideoService;
@@ -26,6 +28,8 @@ public class VideoServiceImpl implements VideoService{
     @Autowired
     private VideosMapperCustom videosMapperCustom;
     @Autowired
+    private SearchRecordsMapper searchRecordsMapper;
+    @Autowired
     private Sid sid;
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
@@ -46,10 +50,21 @@ public class VideoServiceImpl implements VideoService{
     }
 
     @Override
-    @Transactional(propagation = Propagation.SUPPORTS)
-    public PagedResult getAllVideos(Integer currentPage,Integer pageSize){
+    @Transactional(propagation = Propagation.REQUIRED)
+    public PagedResult getAllVideos(Videos videos, Integer isSaveRecord,Integer currentPage,Integer pageSize){
+       String videoDesc=videos.getVideoDesc();
+        //判断是否需要保存热搜词
+        if(isSaveRecord!=null&&isSaveRecord==1){
+            //将热搜词保存至数据库
+            String id = sid.nextShort();
+            SearchRecords searchRecords=new SearchRecords();
+            searchRecords.setId(id);
+            searchRecords.setContent(videoDesc);
+            searchRecordsMapper.insert(searchRecords);
+        }
+
         PageHelper .startPage(currentPage,pageSize);
-        List<VideosVO> list = videosMapperCustom.queryAllVideosVO();
+        List<VideosVO> list = videosMapperCustom.queryAllVideosVO(videoDesc);
         PageInfo<VideosVO> pageInfo=new PageInfo<>(list);
         //装载需要返回的对象
         PagedResult pagedResult=new PagedResult();
@@ -58,5 +73,10 @@ public class VideoServiceImpl implements VideoService{
         pagedResult.setRows(list);
         pagedResult.setRecords(pageInfo.getTotal());
         return pagedResult;
+    }
+
+    @Override
+    public List<String> getHotWords() {
+        return  searchRecordsMapper.getHotWords();
     }
 }

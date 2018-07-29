@@ -12,8 +12,10 @@ import com.wq.utils.PagedResult;
 import io.swagger.annotations.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -190,12 +192,17 @@ public class VideoController extends BasicController{
      * 				 0 - 不需要保存 ，或者为空的时候
      */
     @PostMapping(value="/showAll")
-    public JSONResult showAll(Integer page) throws Exception {
+    public JSONResult showAll(@RequestBody Videos videos, Integer isSaveRecord, Integer page) throws Exception {
         if (page == null) {
             page = 1;
         }
         Integer pageSize=PAGE_SIZE;
-        PagedResult result = videoService.getAllVideos(page,pageSize);
+        PagedResult result = videoService.getAllVideos(videos,isSaveRecord,page,pageSize);
         return JSONResult.ok(result);
+    }
+
+    @PostMapping(value="/hot")
+    public JSONResult hot() throws Exception {
+        return JSONResult.ok(videoService.getHotWords());
     }
 }
