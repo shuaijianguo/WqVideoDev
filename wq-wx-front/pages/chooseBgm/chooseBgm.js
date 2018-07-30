@@ -53,7 +53,10 @@ Page({
     var videoWidth = prePageParams.tmpWidth;
     var tmpVideoUrl = prePageParams.tmpVideoUrl;
     var tmpCoverUrl = prePageParams.tmpCoverUrl;
-    var userInfo = app.getGlobalUserInfo;
+    var userInfo = app.getGlobalUserInfo();//getGlobalUserInfo
+    console.log('wqtest1');
+    console.log(userInfo);
+    console.log('wq2');
     wx.showLoading({
       title: '上传中...',
     });

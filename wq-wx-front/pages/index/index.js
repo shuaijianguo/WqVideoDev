@@ -13,23 +13,33 @@ Page({
     searchContent: ""
   },
 
-  onLoad: function(params) {
+  onLoad: function(params) {//
     var me = this;
     var screenWidth = wx.getSystemInfoSync().screenWidth;
     me.setData({
       screenWidth: screenWidth,
     });
+    //获取查询页输入的查询内容
+    var searchContent=params.search;
+    var isSaveRecord=params.isSaveRecord;
+    //判空处理
+    if(isSaveRecord==null||isSaveRecord==''||isSaveRecord==undefined){
+      isSaveRecord=0;
+    }
+    me.setData({
+      searchContent: searchContent
+    })
     wx.showLoading({
       title: '请等待,正在加载中...',
     })
-    var page = me.data.page;
+    var page = me.data.page;//获取当前的分页数
     console.log(me.data);
-    me.getAllVideoList(page);
+    me.getAllVideoList(page,isSaveRecord);
   },
 
-  onPullDownRefresh: function() {
+  onPullDownRefresh: function() {//下拉刷新
     wx.showNavigationBarLoading();
-    this.getAllVideoList(1);
+    this.getAllVideoList(1,0);//下拉不需要保存热搜词所以给定值为0
   },
 
   onReachBottom: function() {//上拉加载更多
@@ -48,19 +58,19 @@ Page({
 
     var page = currentPage + 1;
 
-    me.getAllVideoList(page);
+    me.getAllVideoList(page,0);
   },
 
-  getAllVideoList: function(page) {
+  getAllVideoList: function (page, isSaveRecord) {
     var me = this;
-    // 获取当前的分页数
-
+    // 获取data中的content
+    var searchContent=me.data.searchContent;
     var serverUrl = app.serverUrl;
     wx.request({
-      url: serverUrl + '/video/showAll?page=' + page,
+      url: serverUrl + '/video/showAll?page=' + page + "&isSaveRecord=" + isSaveRecord,
       method: "POST",
       data: {
-        //videoDesc: searchContent
+        videoDesc: searchContent
       },
       success: function(res) {
         wx.hideLoading();
@@ -88,10 +98,10 @@ Page({
     var me = this;
     var videoList = me.data.videoList;
     var arrindex = e.target.dataset.arrindex;
-    var videoInfo = JSON.stringify(videoList[arrindex]);
+    var videoInfo = JSON.stringify(videoList[arrindex]);//对象转化为字符串这样就能传到下个页面中去了
 
     wx.redirectTo({
-      url: '../videoinfo/videoinfo?videoInfo=' + videoInfo
+      url: '../videoDetail/videoDetail?videoInfo=' + videoInfo
     })
   }
 

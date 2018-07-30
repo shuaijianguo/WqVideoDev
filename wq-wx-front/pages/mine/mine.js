@@ -1,5 +1,4 @@
-//var videoUtil = require('../../utils/videoUtil.js')
-
+var videoUtil = require('../../utils/util.js');
 const app = getApp()
 
 Page({
@@ -12,6 +11,7 @@ Page({
    var that=this;
    //var user = app.userInfo;
    var user = app.getGlobalUserInfo();
+   console.log(user);
    var serverUrl = app.serverUrl;
    wx.showLoading({
      title: '页面努力加载中...',
@@ -38,6 +38,13 @@ Page({
            fansCounts: myUserInfo.fansCounts,
            followCounts: myUserInfo.followCounts,
            receiveLikeCounts: myUserInfo.receiveLikeCounts
+         })
+       } else if (res.data.status == 500) {
+         // 失败弹出框
+         wx.showToast({
+           title: res.data.msg,
+           icon: 'none',
+           duration: 3000
          })
        }
      }
@@ -130,44 +137,6 @@ Page({
     })
   },
   uploadVideo:function(){
-    var that = this;
-    wx.chooseVideo({
-      sourceType: ['album'],
-      success: function (res) {
-        console.log(res);
-
-        var duration = res.duration;
-        var tmpHeight = res.height;
-        var tmpWidth = res.width;
-        var tmpVideoUrl = res.tempFilePath;
-        var tmpCoverUrl = res.thumbTempFilePath;
-
-        if (duration > 11) {
-          wx.showToast({
-            title: '视频长度不能超过10秒...',
-            icon: "none",
-            duration: 2500
-          })
-        } else if (duration < 1) {
-          wx.showToast({
-            title: '视频长度太短，请上传超过1秒的视频...',
-            icon: "none",
-            duration: 2500
-          })
-        } else {
-          // 打开选择bgm的页面
-          wx.navigateTo({
-            url: '../chooseBgm/chooseBgm?duration=' + duration
-            + "&tmpHeight=" + tmpHeight
-            + "&tmpWidth=" + tmpWidth
-            + "&tmpVideoUrl=" + tmpVideoUrl
-            + "&tmpCoverUrl=" + tmpCoverUrl
-            ,
-          })
-        }
-
-      }
-    })
-
+    videoUtil.uploadVideo();
   }
 })

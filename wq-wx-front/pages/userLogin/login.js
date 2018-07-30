@@ -62,17 +62,7 @@ Page({
              wx.redirectTo({
                 url: '../mine/mine',
              })
-            // var redirectUrl = me.redirectUrl;
-            // if (redirectUrl != null && redirectUrl != undefined && redirectUrl != '') {
-            //   wx.redirectTo({
-            //     url: redirectUrl,
-            //   })
-            // } else {
-            //   wx.redirectTo({
-            //     url: '../mine/mine',
-            //   })
-            // }
-            
+          
           } else if (res.data.status == 500) {
             // 失败弹出框
             wx.showToast({
