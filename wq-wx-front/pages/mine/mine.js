@@ -20,7 +20,9 @@ Page({
      url: serverUrl + '/user/query?userId=' + user.id,
      method: "POST",
      header: {
-       'content-type': 'application/json' // 默认值
+       'content-type': 'application/json', // 默认值
+       'userId':user.id,
+       'userToken': user.userToken//这是用来传入后端 进行拦截判断
      },
      success: function (res) {
        console.log(res.data);
@@ -45,6 +47,18 @@ Page({
            title: res.data.msg,
            icon: 'none',
            duration: 3000
+         })
+       } else if (res.data.status == 502) {
+         // 未登录提示框
+         wx.showToast({
+           title: res.data.msg,
+           icon: 'none',
+           duration: 3000,
+           success:function(){
+             wx.redirectTo({
+               url: '../userLogin/login',
+             })
+           }
          })
        }
      }

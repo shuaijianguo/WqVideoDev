@@ -76,16 +76,16 @@ Page({
     })
   },
   showMine:function(){
-    var user = app.getGlobalUserInfo();
-    if(user==null||user==undefined||user==''){
-      //表示还没登录
-      wx.navigateTo({
-        url: '../userLogin/login',
-      })
-    }else{
+    // var user = app.getGlobalUserInfo();
+    // if(user==null||user==undefined||user==''){
+    //   //表示还没登录
+    //   wx.navigateTo({
+    //     url: '../userLogin/login',
+    //   })
+    // }else{
       wx.navigateTo({
         url: '../mine/mine',
       })
-    }
+    // }
   }
 })
