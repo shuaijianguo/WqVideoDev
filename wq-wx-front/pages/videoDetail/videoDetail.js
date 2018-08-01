@@ -42,7 +42,7 @@ Page({
   },
   onShow:function(){
     var me=this;
-    //me.videoCtx.play();//页面显示时就播放
+    me.videoCtx.play();//页面显示时就播放
   },
   onHide:function(){
      var me=this;
@@ -54,12 +54,38 @@ Page({
     })
   },
   upload:function(){
-    //页面绑定的上传视频事件
-    videoUtil.uploadVideo();
+    //获取当前路径，以前当前视频信息，这样确保在用户登录完能重定向到此视频页面
+    var me=this;
+    var user = app.getGlobalUserInfo();
+    var videoInfo = JSON.stringify(me.data.videoInfo);
+    var realUrl = '../videoDetail/videoDetail#videoInfo@' + videoInfo;//把问号转井号，等号转艾特符号，因为在下面拼的时候会把问号等号过滤掉
+    
+    if (user == null || user == undefined || user == '') {
+      //表示还没登录 不能上传
+      wx.navigateTo({
+        url: '../userLogin/login?redirectUrl=' + realUrl,
+      })
+    }else{
+      //页面绑定的上传视频事件
+      videoUtil.uploadVideo();
+    }
   },
   showIndex:function(){
     wx.redirectTo({
       url: '../index/index',
     })
+  },
+  showMine:function(){
+    var user = app.getGlobalUserInfo();
+    if(user==null||user==undefined||user==''){
+      //表示还没登录
+      wx.navigateTo({
+        url: '../userLogin/login',
+      })
+    }else{
+      wx.navigateTo({
+        url: '../mine/mine',
+      })
+    }
   }
 })

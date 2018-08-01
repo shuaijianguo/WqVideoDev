@@ -68,7 +68,11 @@ public class VideoController extends BasicController{
         try {
             if (file != null ) {
                 String fileName = file.getOriginalFilename();
-                String fileNamePrefix=fileName.split("\\.")[0];
+                /*String fileNameCopy=fileName.substring(0,fileName.lastIndexOf("."));
+                String fileNamePrefix = fileName.substring(fileNameCopy.lastIndexOf(".")+1, fileName.lastIndexOf("."));
+                */
+                String fileNamePrefix= fileName.split("\\.")[fileName.split("\\.").length-2];
+                //String fileNamePrefix=fileName.split("\\.")[0];
                 if (StringUtils.isNotBlank(fileName)) {
                     //文件上传的最终保存路径
                      finalVideoPath = FILE_SPACE+ uploadPathDB + "/" + fileName;

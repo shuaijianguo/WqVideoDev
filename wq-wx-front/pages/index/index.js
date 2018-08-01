@@ -23,6 +23,9 @@ Page({
     var searchContent=params.search;
     var isSaveRecord=params.isSaveRecord;
     //判空处理
+    if (searchContent == null || searchContent == '' || searchContent == undefined) {
+      searchContent = "";
+    }
     if(isSaveRecord==null||isSaveRecord==''||isSaveRecord==undefined){
       isSaveRecord=0;
     }

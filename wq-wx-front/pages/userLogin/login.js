@@ -2,16 +2,16 @@ const app = getApp()
 
 Page({
   data: {
+    redirectUrl:''
   },
 
   onLoad: function (params) {
     var me = this;
-    var redirectUrl = params.redirectUrl;
+    var redirectUrl = params.redirectUrl;//拿到重定向的url
     // debugger;
     if (redirectUrl != null && redirectUrl != undefined && redirectUrl != '') {
-      redirectUrl = redirectUrl.replace(/#/g, "?");
+      redirectUrl = redirectUrl.replace(/#/g, "?");//正则表达式
       redirectUrl = redirectUrl.replace(/@/g, "=");
-
       me.redirectUrl = redirectUrl;
     }
   },
@@ -58,9 +58,14 @@ Page({
              //app.userInfo = res.data.data;
             // fixme 修改原有的全局对象为本地缓存
             app.setGlobalUserInfo(res.data.data);
+            var redirectUrl=me.redirectUrl;
+            var realUrl = '../mine/mine';
+            if(redirectUrl!=null&&redirectUrl!=undefined&&redirectUrl!=''){
+                realUrl=redirectUrl;
+            }
             // 页面跳转
              wx.redirectTo({
-                url: '../mine/mine',
+                url: realUrl,
              })
           
           } else if (res.data.status == 500) {
