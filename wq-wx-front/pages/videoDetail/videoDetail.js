@@ -10,7 +10,8 @@ Page({
     cover: "cover",
     videoId:"",
     src:"",
-    videoInfo:{}
+    videoInfo:{},
+   // userLikeVideo:true
   },
 
  videoCtx:{
@@ -76,16 +77,50 @@ Page({
     })
   },
   showMine:function(){
-    // var user = app.getGlobalUserInfo();
-    // if(user==null||user==undefined||user==''){
-    //   //表示还没登录
-    //   wx.navigateTo({
-    //     url: '../userLogin/login',
-    //   })
-    // }else{
+    var user = app.getGlobalUserInfo();
+    if(user==null||user==undefined||user==''){
+      //表示还没登录
+      wx.navigateTo({
+        url: '../userLogin/login',
+      })
+    }else{
       wx.navigateTo({
         url: '../mine/mine',
       })
-    // }
+    }
+  },
+  likeVideoOrNot:function(){
+    var me=this;
+    var user = app.getGlobalUserInfo();
+    var videoInfo = me.data.videoInfo;
+    if (user == null || user == undefined || user == '') {
+      //表示还没登录
+      wx.navigateTo({
+        url: '../userLogin/login',
+      })
+    } else {
+      var userLikeVideo = me.data.userLikeVideo;
+      var url = "/video/like?userId=" + user.id + "&videoId=" + videoInfo.id + "&creatorId=" + videoInfo.userId;//默认请求url是喜欢
+     if(userLikeVideo){
+       url = "/video/unlike?userId=" + user.id + "&videoId=" + videoInfo.id + "&creatorId=" + videoInfo.userId;
+       
+     }
+    wx.request({
+      url: app.serverUrl+url,
+      method:"post",
+      header: {
+        'content-type': 'application/json', // 默认值
+        'userId': user.id,
+        'userToken': user.userToken//这是用来传入后端 进行拦截判断
+      },
+      success:function(res){
+        me.setData({
+          userLikeVideo: !userLikeVideo
+        })
+      }
+
+    })
+
+    }
   }
 })

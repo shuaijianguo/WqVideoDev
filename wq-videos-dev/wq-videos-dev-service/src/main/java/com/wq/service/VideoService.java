@@ -36,4 +36,22 @@ public interface VideoService {
      * @return
      */
     public List<String> getHotWords();
+
+    /**
+     * 用户收藏视频(点赞)
+     * @param userId
+     * @param videoId
+     * @param createrId
+     */
+    public void likeVideo(String userId,String videoId,String createrId);
+
+    /**
+     * 用户取消收藏视频(取消点赞)
+     * @param userId
+     * @param videoId
+     * @param createrId
+     */
+
+    public void unLikeVideo(String userId,String videoId,String createrId);
+
 }

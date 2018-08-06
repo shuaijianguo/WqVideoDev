@@ -209,4 +209,17 @@ public class VideoController extends BasicController{
     public JSONResult hot() throws Exception {
         return JSONResult.ok(videoService.getHotWords());
     }
+
+    @PostMapping(value="/like")
+    public JSONResult like(String userId,String videoId,String creatorId) throws Exception {
+        videoService.likeVideo(userId,videoId,creatorId);
+        return JSONResult.ok();
+    }
+
+    @PostMapping(value="/unlike")
+    public JSONResult unlike(String userId,String videoId,String creatorId) throws Exception {
+        videoService.unLikeVideo(userId,videoId,creatorId);
+        return JSONResult.ok();
+    }
+
 }

@@ -21,11 +21,26 @@
     <result column="nickname" property="nickname" jdbcType="VARCHAR" />
 
   </resultMap>
-  <select id="queryAllVideosVO" resultMap="BaseResultMap">
+  <select id="queryAllVideosVO" resultMap="BaseResultMap" parameterType="String">
     select v.* ,u.face_image,u.nickname
     from videos v left join users u
     on v.user_id=u.id
-    where 1=1 and v.status=1
+    where 1=1
+    <if test="videoDesc!=null and videoDesc!=''">
+      and v.video_desc like '%${videoDesc}%'
+    </if>
+    and v.status=1
     ORDER by v.create_time desc
   </select>
+
+  <update id="addVideoLike" parameterType="String">
+  update videos set like_counts=like_counts+1
+  where id=#{videoId}
+  </update>
+
+  <update id="reduceVideoLike" parameterType="String">
+    update videos set like_counts=like_counts-1
+    where id=#{videoId}
+  </update>
+
 </mapper>
