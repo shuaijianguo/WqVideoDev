@@ -1,8 +1,11 @@
 package com.wq.service.impl;
 
+import com.wq.mapper.UsersLikeVideosMapper;
 import com.wq.mapper.UsersMapper;
 import com.wq.pojo.Users;
+import com.wq.pojo.UsersLikeVideos;
 import com.wq.service.UserService;
+import org.apache.commons.lang3.StringUtils;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +13,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.entity.Example.Criteria;
+
+import java.util.List;
 
 /**
  * Created by wuqingvika on 2018/7/1.
@@ -21,6 +26,8 @@ public class UserServiceImpl implements UserService {
     private UsersMapper usersMapper;
     @Autowired
     private Sid sid;
+    @Autowired
+    private UsersLikeVideosMapper usersLikeVideosMapper;
 
     @Transactional(propagation = Propagation.SUPPORTS)
     @Override
@@ -67,5 +74,22 @@ public class UserServiceImpl implements UserService {
         criteria.andEqualTo("id",userId);
         Users users = usersMapper.selectOneByExample(userExample);
         return users;
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public boolean isUserLikeVideo(String userId,String videoId) {
+        if(StringUtils.isBlank(userId)||StringUtils.isBlank(videoId)){
+            return false;//
+        }
+        Example example=new Example(UsersLikeVideos.class);//这里踩了坑
+        Criteria criteria=example.createCriteria();
+        criteria.andEqualTo("userId",userId);
+        criteria.andEqualTo("videoId",videoId);
+        List<UsersLikeVideos> usersLikeVideos = usersLikeVideosMapper.selectByExample(example);
+        if(usersLikeVideos!=null&&!usersLikeVideos.isEmpty()){
+            return true;
+        }
+        return false;
     }
 }

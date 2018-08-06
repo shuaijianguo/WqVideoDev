@@ -39,4 +39,12 @@ public interface UserService {
      * @return
      */
     public Users queryUserByUserId(String userId);
+
+    /**
+     * 判断用户是否喜欢该视频
+     * @param userId
+     * @param videoId
+     * @return
+     */
+    public boolean isUserLikeVideo(String userId,String videoId);
 }

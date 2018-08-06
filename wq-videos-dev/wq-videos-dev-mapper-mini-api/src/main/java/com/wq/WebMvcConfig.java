@@ -31,7 +31,9 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         //把自己的定义的拦截器添加到拦截器注册 中心
         registry.addInterceptor(miniapiInterceptor()).addPathPatterns("/user/**")
         .addPathPatterns("/bgm/**")
-        .addPathPatterns("/video/upload","/video/uploadCover");//视频查看全部不需要拦截所以不需要写在这里
+        .addPathPatterns("/video/upload","/video/uploadCover")//视频查看全部不需要拦截所以不需要写在这里
+                .addPathPatterns("/video/like","/video/unlike")
+        .excludePathPatterns("/user/queryPublisher");//排除查看发布者信息 让它不走拦截
         super.addInterceptors(registry);
     }
 }
