@@ -11,13 +11,18 @@ Page({
    var that=this;
    //var user = app.userInfo;
    var user = app.getGlobalUserInfo();
+   var userId=user.id;
+   var publisherId = params.publisherId;
+   if (publisherId!=null&&publisherId!=undefined&&publisherId!=''){
+     userId=publisherId;
+   }
    console.log(user);
    var serverUrl = app.serverUrl;
    wx.showLoading({
      title: '页面努力加载中...',
    });
    wx.request({
-     url: serverUrl + '/user/query?userId=' + user.id,
+     url: serverUrl + '/user/query?userId=' + userId,
      method: "POST",
      header: {
        'content-type': 'application/json', // 默认值

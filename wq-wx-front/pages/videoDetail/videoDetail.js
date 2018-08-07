@@ -33,13 +33,33 @@ Page({
       //不要拉伸
       cover="";
     }
-
+    
     me.setData({
       videoId: videoInfo.id,
       src: app.serverUrl+videoInfo.videoPath,
       videoInfo: videoInfo,
       cover:cover
     })
+
+    var user = app.getGlobalUserInfo();
+    var loginUserId = "";
+    if (user != null && user != undefined && user != '') {
+      loginUserId = user.id;
+    }
+    wx.request({
+      url: app.serverUrl + '/user/queryPublisher?loginUserId=' + loginUserId + "&videoId=" + videoInfo.id + "&publisherId=" + videoInfo.userId,
+      method: "post",
+      success: function (res) {
+        var publisher = res.data.data.usersVO;
+        var userLikeVideo = res.data.data.userLikeVideo;
+        me.setData({
+          publisher: publisher,
+          userLikeVideo: userLikeVideo,
+          serverUrl:app.serverUrl
+        })
+      }
+    })
+
   },
   onShow:function(){
     var me=this;
@@ -53,6 +73,23 @@ Page({
     wx.navigateTo({
       url: '../searchView/searchView',
     })
+  },
+  showPublisher:function(){
+    var me = this;
+    var user = app.getGlobalUserInfo();
+    var videoInfo = me.data.videoInfo;
+    var realUrl = '../mine/mine#publisherId@' + videoInfo.userId;//把问号转井号，等号转艾特符号，因为在下面拼的时候会把问号等号过滤掉
+
+    if (user == null || user == undefined || user == '') {
+      //表示还没登录 不能上传
+      wx.navigateTo({
+        url: '../userLogin/login?redirectUrl=' + realUrl,
+      })
+    } else {
+      wx.navigateTo({
+        url: '../mine/mine?publisherId=' + videoInfo.userId,
+      }) 
+    }
   },
   upload:function(){
     //获取当前路径，以前当前视频信息，这样确保在用户登录完能重定向到此视频页面
