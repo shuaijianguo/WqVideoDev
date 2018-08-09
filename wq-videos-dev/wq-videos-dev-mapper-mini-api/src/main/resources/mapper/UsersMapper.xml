@@ -24,4 +24,25 @@
     UPDATE users set receive_like_counts=receive_like_counts-1
     where id=#{userId}
   </update>
+
+  <update id="addAttentionCount" parameterType="String">
+    UPDATE users set follow_counts=follow_counts+1
+    where id=#{userId}
+  </update>
+
+  <update id="reduceAttentionCount" parameterType="String">
+    UPDATE users set follow_counts=follow_counts-1
+    where id=#{userId}
+  </update>
+
+  <update id="addFansCount" parameterType="String">
+    UPDATE users set fans_counts=fans_counts+1
+    where id=#{userId}
+  </update>
+
+  <update id="reduceFansCount" parameterType="String">
+    UPDATE users set fans_counts=fans_counts-1
+    where id=#{userId}
+  </update>
+
 </mapper>

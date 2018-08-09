@@ -47,4 +47,26 @@ public interface UserService {
      * @return
      */
     public boolean isUserLikeVideo(String userId,String videoId);
+
+    /**
+     * 用户关注
+     * @param userId
+     * @param fansId
+     */
+    public void saveUserFans(String userId,String fansId);
+
+    /**
+     * 用户取消关注
+     * @param userId
+     * @param fansId
+     */
+    public void deleteUserFans(String userId,String fansId);
+
+    /**
+     * 判断用户是否关注 在加载个人信息页的时候
+     * @param userId
+     * @param fanId
+     * @return
+     */
+    public boolean isFollowPublisher(String userId,String fanId);
 }

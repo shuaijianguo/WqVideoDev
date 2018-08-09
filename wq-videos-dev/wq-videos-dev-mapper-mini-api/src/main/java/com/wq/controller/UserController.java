@@ -1,6 +1,7 @@
 package com.wq.controller;
 
 import com.wq.pojo.Users;
+import com.wq.pojo.vo.PublisherVO;
 import com.wq.pojo.vo.UsersVO;
 import com.wq.service.UserService;
 import com.wq.utils.JSONResult;
@@ -82,14 +83,45 @@ public class UserController extends BasicController {
     @ApiImplicitParam(name = "userId", value = "用户Id", required = true,
             dataType = "String", paramType = "query")
     @PostMapping("/query")
-    public JSONResult query(String userId)  {
-        if (StringUtils.isBlank(userId)) {
+    public JSONResult query(String userId,String fanId)  {
+        if (StringUtils.isBlank(userId)||"undefined".equals(userId)) {
             return JSONResult.errorMsg("用户Id不可为空");
         }
         Users users = userService.queryUserByUserId(userId);
         UsersVO usersVO=new UsersVO();
         BeanUtils.copyProperties(users,usersVO);
+        usersVO.setFollow(userService.isFollowPublisher(userId,fanId));
         return JSONResult.ok(usersVO);
     }
+
+    @PostMapping("/queryPublisher")
+    public JSONResult queryPublisher(String loginUserId,String videoId,String publisherId)  {
+        if (StringUtils.isBlank(publisherId)) {
+            return JSONResult.errorMsg("");
+        }
+        //查询发布者的相关信息
+        Users users = userService.queryUserByUserId(publisherId);
+        UsersVO usersVO=new UsersVO();
+        BeanUtils.copyProperties(users,usersVO);
+        boolean userLikeVideo = userService.isUserLikeVideo(loginUserId,videoId);
+        PublisherVO publisherVO=new PublisherVO();
+        publisherVO.setUserLikeVideo(userLikeVideo);
+        publisherVO.setUsersVO(usersVO);
+        return JSONResult.ok(publisherVO);
+    }
+
+
+    @PostMapping("/beYourFan")
+    public JSONResult beYourFan(String userId,String fanId){
+        userService.saveUserFans(userId,fanId);
+        return JSONResult.ok("已关注!");
+    }
+
+    @PostMapping("/dontBeYourFan")
+    public JSONResult dontBeYourFan(String userId,String fanId){
+        userService.deleteUserFans(userId,fanId);
+        return JSONResult.ok("已取消关注!");
+    }
+
 
 }

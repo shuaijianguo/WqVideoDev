@@ -15,6 +15,15 @@ public class UsersVO {
     @ApiModelProperty(hidden = true)
     private String userToken;
 
+    public boolean isFollow() {
+        return isFollow;
+    }
+
+    public void setFollow(boolean follow) {
+        isFollow = follow;
+    }
+
+    private boolean isFollow;
     /**
      * 用户名
      */
