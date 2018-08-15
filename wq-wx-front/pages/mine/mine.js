@@ -3,10 +3,53 @@ const app = getApp()
 
 Page({
   data: {
-    isMe:true,
+    isMe: true,
+    isFollow: false,
     faceUrl: "../resource/images/noneface.png" 
   },
-
+  followMe:function(e){
+    var me=this;
+    var publisherId=me.data.publisherId;
+    
+    var user = app.getGlobalUserInfo();
+    var userId = user.id;
+    var fanId =userId;
+     var folowType=e.currentTarget.dataset.followtype;//dataset-后面大写的 取的时候一律小写
+     var url='';
+     if(folowType=='0'){//已关注，下一步就是取消关注 
+       url = '/user/dontBeYourFan?userId=' + publisherId+"&fanId="+fanId;
+     }else{//未关注 下一步就是要关注 
+       url = '/user/beYourFan?userId=' + publisherId + "&fanId=" + fanId;
+     }
+     wx.request({
+       method:'post',
+       url: app.serverUrl+url,
+       header: {
+         'content-type': 'application/json', // 默认值
+         'userId': user.id,
+         'userToken': user.userToken//这是用来传入后端 进行拦截判断
+       },
+       success:function(res){
+         wx.showToast({
+           title: res.data.data,
+           icon: 'none',
+           duration: 3000
+         });
+         if (folowType == '0') {//已关注，下一步就是取消关注 
+           me.setData({
+             isFollow: false,
+             fansCounts: --me.data.fansCounts
+           })
+         } else {//未关注 下一步就是要关注 
+           me.setData({
+             isFollow: true,
+             fansCounts: ++me.data.fansCounts
+           })
+         }
+        
+       }
+     })
+  },
   onLoad: function (params) {
    var that=this;
    //var user = app.userInfo;
@@ -14,6 +57,17 @@ Page({
    var userId=user.id;
    var publisherId = params.publisherId;
    if (publisherId!=null&&publisherId!=undefined&&publisherId!=''){
+     if(userId==publisherId){
+       that.setData({
+         isMe:true,
+         publisherId:publisherId
+       })
+     }else{
+       that.setData({
+          isMe:false,
+          publisherId: publisherId
+       })
+     }
      userId=publisherId;
    }
    console.log(user);
@@ -22,7 +76,7 @@ Page({
      title: '页面努力加载中...',
    });
    wx.request({
-     url: serverUrl + '/user/query?userId=' + userId,
+     url: serverUrl + '/user/query?userId=' + userId+'&fanId='+user.id,
      method: "POST",
      header: {
        'content-type': 'application/json', // 默认值
@@ -44,7 +98,8 @@ Page({
            nickname: myUserInfo.nickname,
            fansCounts: myUserInfo.fansCounts,
            followCounts: myUserInfo.followCounts,
-           receiveLikeCounts: myUserInfo.receiveLikeCounts
+           receiveLikeCounts: myUserInfo.receiveLikeCounts,
+           isFollow: myUserInfo.follow
          })
        } else if (res.data.status == 500) {
          // 失败弹出框
